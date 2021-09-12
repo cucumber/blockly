@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import 'blockly/blocks'
 
+import { BlocklyOptions } from 'blockly/blockly'
 import Blockly from 'blockly/core'
 import locale from 'blockly/msg/en'
-import 'blockly/blocks'
-import { BlocklyOptions } from 'blockly/blockly'
+import React, { useEffect } from 'react'
 
 Blockly.setLocale(locale)
 
@@ -13,18 +13,19 @@ type Props = {
   options: BlocklyOptions
 }
 
-const BlocklyComponent: React.FunctionComponent<Props> = ({ workspaceXml, setWorkspaxeXml, options }) => {
+const BlocklyComponent: React.FunctionComponent<Props> = ({
+  workspaceXml,
+  setWorkspaxeXml,
+  options,
+}) => {
   const blocklyDiv = React.createRef<HTMLDivElement>()
 
   useEffect(() => {
     if (!blocklyDiv.current) return
-    const workspace = Blockly.inject(
-      blocklyDiv.current,
-      options,
-    )
+    const workspace = Blockly.inject(blocklyDiv.current, options)
 
     workspace.addChangeListener(() => {
-      const xml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace));
+      const xml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace))
       setWorkspaxeXml(xml)
     })
 
@@ -33,7 +34,7 @@ const BlocklyComponent: React.FunctionComponent<Props> = ({ workspaceXml, setWor
     return () => workspace.dispose()
   }, [blocklyDiv.current])
 
-  return <div ref={blocklyDiv} id="blocklyDiv"/>
+  return <div ref={blocklyDiv} id="blocklyDiv" />
 }
 
 export default BlocklyComponent

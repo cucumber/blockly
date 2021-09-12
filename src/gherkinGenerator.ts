@@ -1,27 +1,25 @@
-import { Generator, Block } from 'blockly'
-
-declare module Blockly {
-  class Generator {
-    [key: string]: (block: Block) => string
-  }
-}
+import { Block, Generator } from 'blockly'
 
 const generator = new Generator('Cucumber')
 
+// @ts-ignore
 generator['scenario'] = (block: Block) => {
   return `Scenario: ${block.getFieldValue('SCENARIO_NAME')}\n`
 }
 
-generator['given'] = (block: Block) => {
+// @ts-ignore
+generator['given'] = () => {
   return 'Given '
 }
 
-generator['when'] = (block: Block) => {
+// @ts-ignore
+generator['when'] = () => {
   return 'When '
 }
 
-generator['i_have__int__cukes_in_my__word_'] = (block: Block) => {
-  return "I have some cukes..."
+// @ts-ignore
+generator['i_have__int__cukes_in_my__word_'] = () => {
+  return 'I have some cukes...'
 }
 
 export default generator
