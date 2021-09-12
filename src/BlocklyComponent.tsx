@@ -8,7 +8,7 @@ import React, { useEffect } from 'react'
 Blockly.setLocale(locale)
 
 type Props = {
-     workspaceXml: string
+       workspaceXml: string
   setWorkspaxeXml: (xml: string) => void
   options: BlocklyOptions
 }
