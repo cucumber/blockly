@@ -9,10 +9,11 @@ Blockly.setLocale(locale)
 
 type Props = {
   workspaceXml: string
+  setWorkspaxeXml: (xml: string) => void
   options: BlocklyOptions
 }
 
-const BlocklyComponent: React.FunctionComponent<Props> = ({ workspaceXml, options }) => {
+const BlocklyComponent: React.FunctionComponent<Props> = ({ workspaceXml, setWorkspaxeXml, options }) => {
   const blocklyDiv = React.createRef<HTMLDivElement>()
 
   useEffect(() => {
@@ -21,6 +22,11 @@ const BlocklyComponent: React.FunctionComponent<Props> = ({ workspaceXml, option
       blocklyDiv.current,
       options,
     )
+
+    workspace.addChangeListener(() => {
+      const xml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace));
+      setWorkspaxeXml(xml)
+    })
 
     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(workspaceXml), workspace)
 
