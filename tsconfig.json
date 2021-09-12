@@ -5,11 +5,8 @@
     "declaration": true,
     "declarationMap": true,
     "target": "es6",
-    "module": "commonjs",
-    "lib": [
-      "es2019",
-      "dom"
-    ],
+    "module": "ES2020",
+    "lib": ["es2019", "dom"],
     "sourceMap": true,
     "allowJs": false,
     "jsx": "react",
@@ -19,6 +16,6 @@
     "downlevelIteration": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
-    "experimentalDecorators": true,
+    "experimentalDecorators": true
   }
 }
