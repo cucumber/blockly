@@ -8,7 +8,8 @@
     "postinstall": "cp -r node_modules/blockly/media example/media",
     "eslint-fix": "eslint --ext ts,tsx --max-warnings 0 --fix src test example",
     "eslint": "eslint --ext ts,tsx --max-warnings 0 src test example",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "pretty-quick-staged": "pretty-quick --staged"
   },
   "keywords": [
     "gherkin",
@@ -50,10 +51,5 @@
     "semi": false,
     "singleQuote": true,
     "printWidth": 100
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
   }
 }
