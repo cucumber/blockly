@@ -1,0 +1,44 @@
+{
+  "name": "@cucumber/blockly",
+  "version": "0.0.1",
+  "description": "Gherkin Editor in Blockly",
+  "scripts": {
+    "test": "mocha",
+    "start": "esbuild example/app.tsx --bundle --outdir=example/js --servedir=example",
+    "postinstall": "cp -r node_modules/blockly/media example/media"
+  },
+  "keywords": [
+    "gherkin",
+    "editor",
+    "blockly",
+    "cucumber"
+  ],
+  "author": "Aslak Hellesøy",
+  "license": "MIT",
+  "dependencies": {
+    "blockly": "^6.20210701.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.9.1",
+    "@types/react": "^17.0.20",
+    "@types/react-dom": "^17.0.9",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "esbuild": "^0.12.26",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.25.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "mocha": "^9.1.1",
+    "prettier": "^2.4.0",
+    "pretty-quick": "^3.1.1",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2"
+  }
+}
