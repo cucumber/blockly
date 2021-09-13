@@ -38,7 +38,7 @@ const App: React.FunctionComponent = () => {
               wheel: true,
             },
           }}
-        ></BlocklyComponent>
+        />
       </div>
 
       <div className="flex-child">
