@@ -2,6 +2,8 @@
 
 This is a beginner-friendly Gherkin editor based on [Blockly](https://developers.google.com/blockly).
 
+**The editor is experimental and not ready for production use.**
+
 ![Screenhot](images/screenshot.png)
 
 ## Try it out
