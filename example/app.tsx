@@ -1,6 +1,8 @@
-import '../src/defineBlocks'
+import '../src/defineBlocks.js'
 
-import React, { useState } from 'react'
+import { pretty } from '@cucumber/gherkin-utils'
+import { GherkinDocument } from '@cucumber/messages'
+import React, { useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 
 import BlocklyComponent from '../src/BlocklyComponent'
@@ -11,6 +13,7 @@ const toolbox = `
   <block type="given"/>
   <block type="when"/>
   <block type="i_have__int__cukes_in_my__word_" />
+  <block type="i_check_if_i_am_hungry" />
 </xml>
 `
 
@@ -32,6 +35,11 @@ const App: React.FunctionComponent = () => {
       </block>
     </xml>
   `)
+  const [gherkinDocuments, setGherkinDocuments] = useState<readonly GherkinDocument[]>([])
+
+  const gherkinSource = useMemo(() => {
+    return gherkinDocuments.map((gherkinDocument) => pretty(gherkinDocument)).join('\n')
+  }, [gherkinDocuments])
 
   return (
     <div className="flex-container">
@@ -39,6 +47,7 @@ const App: React.FunctionComponent = () => {
         <BlocklyComponent
           workspaceXml={workspaceXml}
           setWorkspaceXml={setWorkspaceXml}
+          setGherkinDocuments={setGherkinDocuments}
           options={{
             readOnly: false,
             trashcan: true,
@@ -54,7 +63,8 @@ const App: React.FunctionComponent = () => {
       </div>
 
       <div className="flex-child">
-        <pre>{workspaceXml}</pre>
+        <pre className="border">{gherkinSource}</pre>
+        <pre className="border">{workspaceXml}</pre>
       </div>
     </div>
   )
