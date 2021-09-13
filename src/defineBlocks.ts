@@ -1,11 +1,10 @@
-import { Blocks, FieldTextInput } from 'blockly'
-import { FieldNumber } from 'blockly/blockly'
+import Blockly from 'blockly'
 
-Blocks['scenario'] = {
-  init: function () {
+Blockly.Blocks['scenario'] = {
+  init: function (this: Blockly.Block) {
     this.appendDummyInput()
       .appendField('Scenario:')
-      .appendField(new FieldTextInput('The one where...'), 'SCENARIO_NAME')
+      .appendField(new Blockly.FieldTextInput('The one where...'), 'SCENARIO_NAME')
     this.appendStatementInput('STEPS').setCheck('STEP_KEYWORD')
     this.setColour(135)
     this.setTooltip('')
@@ -13,8 +12,8 @@ Blocks['scenario'] = {
   },
 }
 
-Blocks['given'] = {
-  init: function () {
+Blockly.Blocks['given'] = {
+  init: function (this: Blockly.Block) {
     this.appendValueInput('NAME').setCheck('STEP_TEXT').appendField('Given')
     this.setPreviousStatement(true, 'STEP_KEYWORD')
     this.setNextStatement(true, 'STEP_KEYWORD')
@@ -24,8 +23,8 @@ Blocks['given'] = {
   },
 }
 
-Blocks['when'] = {
-  init: function () {
+Blockly.Blocks['when'] = {
+  init: function (this: Blockly.Block) {
     this.appendValueInput('NAME').setCheck('STEP_TEXT').appendField('When')
     this.setPreviousStatement(true, 'STEP_KEYWORD')
     this.setNextStatement(true, 'STEP_KEYWORD')
@@ -35,13 +34,13 @@ Blocks['when'] = {
   },
 }
 
-Blocks['i_have__int__cukes_in_my__word_'] = {
-  init: function () {
+Blockly.Blocks['i_have__int__cukes_in_my__word_'] = {
+  init: function (this: Blockly.Block) {
     this.appendDummyInput()
       .appendField('I have')
-      .appendField(new FieldNumber(42), 'ARG1')
+      .appendField(new Blockly.FieldNumber(42), 'ARG1')
       .appendField('cukes in my')
-      .appendField(new FieldTextInput('belly'), 'ARG2')
+      .appendField(new Blockly.FieldTextInput('belly'), 'ARG2')
     this.setOutput(true, 'STEP_TEXT')
     this.setColour(180)
     this.setTooltip('I have {int} cukes in my {word}')
