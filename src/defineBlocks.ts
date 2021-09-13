@@ -5,58 +5,79 @@ Blockly.Blocks['scenario'] = {
     this.appendDummyInput()
       .appendField('Scenario:')
       .appendField(new Blockly.FieldTextInput('The one where...'), 'SCENARIO_NAME')
-    this.appendStatementInput('STEPS').setCheck('STEP_KEYWORD')
+    this.appendStatementInput('STEPS').setCheck('STEP')
     this.setColour(135)
     this.setTooltip('')
     this.setHelpUrl('')
   },
 }
 
-Blockly.Blocks['given'] = {
+Blockly.Blocks['step'] = {
   init: function (this: Blockly.Block) {
-    this.appendValueInput('NAME').setCheck('STEP_TEXT').appendField('Given')
-    this.setPreviousStatement(true, 'STEP_KEYWORD')
-    this.setNextStatement(true, 'STEP_KEYWORD')
+    const input = this.appendDummyInput()
+
+    const stepTextInput = new Blockly.FieldTextInput('')
+    // https://github.com/google/blockly/issues/4350
+    // https://github.com/google/blockly/issues/2496
+    // https://groups.google.com/g/blockly/c/UWoFiv3hvk0
+    // @ts-ignore
+    stepTextInput.onFinishEditing_ = (stepText: string) => {
+      // @ts-ignore
+      this.setWarningText(null)
+      if (stepText === 'warn') {
+        this.setWarningText('Here is a warning!')
+      }
+      if (stepText === 'cukes') {
+        input.removeField('STEP_TEXT')
+        input.appendField(new Blockly.FieldLabelSerializable('I have '), 'TEXT1')
+        const firstFieldTextInput = new Blockly.FieldTextInput('42')
+        input.appendField(firstFieldTextInput, 'ARG1')
+        input.appendField(new Blockly.FieldLabelSerializable(' cukes in my '), 'TEXT2')
+        input.appendField(new Blockly.FieldTextInput('belly'), 'ARG2')
+
+        // Focus the first input
+        setTimeout(() => {
+          firstFieldTextInput.showEditor()
+        }, 0)
+      }
+    }
+    input
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['Given', 'GIVEN'],
+          ['When', 'WHEN'],
+          ['Then', 'THEN'],
+        ]),
+        'STEP_KEYWORD'
+      )
+      .appendField(stepTextInput, 'STEP_TEXT')
+    this.setPreviousStatement(true, 'STEP')
+    this.setNextStatement(true, 'STEP')
     this.setColour(270)
     this.setTooltip('')
     this.setHelpUrl('')
   },
 }
 
-Blockly.Blocks['when'] = {
+Blockly.Blocks['step_cukes_in_belly'] = {
   init: function (this: Blockly.Block) {
-    this.appendValueInput('NAME').setCheck('STEP_TEXT').appendField('When')
-    this.setPreviousStatement(true, 'STEP_KEYWORD')
-    this.setNextStatement(true, 'STEP_KEYWORD')
-    this.setColour(270)
-    this.setTooltip('')
-    this.setHelpUrl('')
-  },
-}
-
-Blockly.Blocks['i_have__int__cukes_in_my__word_'] = {
-  init: function (this: Blockly.Block) {
-    // TODO: Remove the leading/trailing spaces in label fields and use a custom "hidden" field for spaces instead.
-    // https://developers.google.com/blockly/guides/create-custom-blocks/fields/customizing-fields/creating
-    // This way we can avoid having the leading/trailing spaces rendered - it's currently a bit too "spacey"
     this.appendDummyInput()
-      .appendField('I have ')
-      .appendField(new Blockly.FieldNumber(42), 'ARG1')
-      .appendField(' cukes in my ')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['Given', 'GIVEN'],
+          ['When', 'WHEN'],
+          ['Then', 'THEN'],
+        ]),
+        'KEYWORD'
+      )
+      .appendField(new Blockly.FieldLabelSerializable('I have '), 'TEXT1')
+      .appendField(new Blockly.FieldTextInput('42'), 'ARG1')
+      .appendField(new Blockly.FieldLabelSerializable(' cukes in my '), 'TEXT2')
       .appendField(new Blockly.FieldTextInput('belly'), 'ARG2')
-    this.setOutput(true, 'STEP_TEXT')
-    this.setColour(180)
+    this.setPreviousStatement(true, 'STEP')
+    this.setNextStatement(true, 'STEP')
+    this.setColour(270)
     this.setTooltip('I have {int} cukes in my {word}')
-    this.setHelpUrl('')
-  },
-}
-
-Blockly.Blocks['i_check_if_i_am_hungry'] = {
-  init: function (this: Blockly.Block) {
-    this.appendDummyInput().appendField('I check if I am hungry')
-    this.setOutput(true, 'STEP_TEXT')
-    this.setColour(180)
-    this.setTooltip('I check if I am hungry')
     this.setHelpUrl('')
   },
 }

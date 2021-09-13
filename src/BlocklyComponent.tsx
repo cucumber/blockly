@@ -29,7 +29,12 @@ const BlocklyComponent: React.FunctionComponent<Props> = ({
     if (!blocklyDiv.current) return
     const workspace = Blockly.inject(blocklyDiv.current, options)
 
-    workspace.addChangeListener(() => {
+    // @ts-ignore
+    workspace.addChangeListener((event) => {
+      if ('name' in event && event.name === 'STEP_TEXT') {
+        // no-op
+      }
+
       const xml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace))
       const blocks = workspace.getTopBlocks(true)
       const gherkinDocuments = blocks.map((block) => toGherkinDocument(block))
