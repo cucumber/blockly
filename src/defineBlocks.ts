@@ -28,19 +28,21 @@ Blockly.Blocks['step'] = {
         this.setWarningText('Here is a warning!')
       }
       if (stepText === 'cukes') {
-        input.removeField('STEP_TEXT')
-        input.appendField(new Blockly.FieldLabelSerializable('I have '), 'TEXT1')
-        const firstFieldTextInput = new Blockly.FieldTextInput('42')
-        input.appendField(firstFieldTextInput, 'ARG1')
-        input.appendField(new Blockly.FieldLabelSerializable(' cukes in my '), 'TEXT2')
-        input.appendField(new Blockly.FieldTextInput('belly'), 'ARG2')
+        const blockName = 'step_cukes_in_belly'
 
-        // Focus the first input
-        setTimeout(() => {
-          firstFieldTextInput.showEditor()
-        }, 0)
+        const childBlock = this.workspace.newBlock(blockName)
+        childBlock.setFieldValue(this.getFieldValue('STEP_KEYWORD'), 'STEP_KEYWORD')
+        // @ts-ignore
+        childBlock.initSvg()
+        // @ts-ignore
+        childBlock.render()
+
+        // Replace this block with the new one
+        this.previousConnection.targetBlock().nextConnection.connect(childBlock.previousConnection)
+        this.dispose(true)
       }
     }
+
     input
       .appendField(
         new Blockly.FieldDropdown([
@@ -68,7 +70,7 @@ Blockly.Blocks['step_cukes_in_belly'] = {
           ['When', 'WHEN'],
           ['Then', 'THEN'],
         ]),
-        'KEYWORD'
+        'STEP_KEYWORD'
       )
       .appendField(new Blockly.FieldLabelSerializable('I have '), 'TEXT1')
       .appendField(new Blockly.FieldTextInput('42'), 'ARG1')

@@ -24,9 +24,9 @@ const App: React.FunctionComponent = () => {
           <block type="step_cukes_in_belly" id="ocA!S!M7spvvYMtZWVyI">
             <field name="STEP_KEYWORD">GIVEN</field>
             <field name="TEXT1">I have </field>
-            <field name="ARG1">42</field>
+            <field name="ARG1">99</field>
             <field name="TEXT2"> cukes in my </field>
-            <field name="ARG2">belly</field>
+            <field name="ARG2">bag</field>
             <next>
               <block type="step" id="n/BF;iqZ;SaE1l)8{J6+">
                 <field name="STEP_KEYWORD">WHEN</field>
