@@ -6,6 +6,12 @@ const location: Location = {
   column: -1,
 }
 
+const StepKeywordByType: Record<string, string> = {
+  GIVEN: 'Given ',
+  WHEN: 'When ',
+  THEN: 'Then ',
+}
+
 export function toGherkinDocument(block: Blockly.Block): GherkinDocument {
   const children: FeatureChild[] = []
 
@@ -31,11 +37,7 @@ export function toScenario(block: Blockly.Block): Scenario {
 
   let stepBlock = (block.childBlocks_ || [])[0]
   while (stepBlock) {
-    const step = toStep(stepBlock)
-    if (!step) {
-      break
-    }
-    steps.push(step)
+    steps.push(toStep(stepBlock))
     stepBlock = stepBlock.getNextBlock()
   }
 
@@ -51,17 +53,19 @@ export function toScenario(block: Blockly.Block): Scenario {
   }
 }
 
-export function toStep(block: Blockly.Block): Step | null {
-  const keyword = { given: 'Given ', when: 'When ', then: 'Then ' }[block.type] || '* '
-  const nameBlock = block.childBlocks_[0]
-  if (!nameBlock) return null
-  const id = nameBlock.id
-  const input = nameBlock.inputList[0]
-  const text = input.fieldRow.map((field) => field.getValue()).join('')
+export function toStep(block: Blockly.Block): Step {
+  const id = block.id
+  const dummyInput = block.inputList[0]
+  const keyword = StepKeywordByType[dummyInput.fieldRow[0].getValue()]
+  const text = dummyInput.fieldRow
+    .slice(1)
+    .map((field) => field.getValue())
+    .join('')
+
   return {
+    id,
     keyword,
     text,
-    id,
     location,
   }
 }

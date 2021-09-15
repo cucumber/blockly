@@ -1,85 +1,134 @@
+import { jsSearchIndex, StepDocument } from '@cucumber/suggest'
+import { StepSegments } from '@cucumber/suggest/src/types'
+import autocomplete, { AutocompleteItem } from 'autocompleter'
 import Blockly from 'blockly'
 
-Blockly.Blocks['scenario'] = {
-  init: function (this: Blockly.Block) {
-    this.appendDummyInput()
-      .appendField('Scenario:')
-      .appendField(new Blockly.FieldTextInput('The one where...'), 'SCENARIO_NAME')
-    this.appendStatementInput('STEPS').setCheck('STEP')
-    this.setColour(135)
-    this.setTooltip('')
-    this.setHelpUrl('')
-  },
+type SuggestAutocompleteItem = AutocompleteItem & {
+  segments: StepSegments
 }
 
-Blockly.Blocks['step'] = {
-  init: function (this: Blockly.Block) {
-    const input = this.appendDummyInput()
+export function defineBlocks(stepDocuments: readonly StepDocument[]) {
+  const index = jsSearchIndex(stepDocuments)
 
-    const stepTextInput = new Blockly.FieldTextInput('')
-    // https://github.com/google/blockly/issues/4350
-    // https://github.com/google/blockly/issues/2496
-    // https://groups.google.com/g/blockly/c/UWoFiv3hvk0
-    // @ts-ignore
-    stepTextInput.onFinishEditing_ = (stepText: string) => {
-      // @ts-ignore
-      this.setWarningText(null)
-      if (stepText === 'warn') {
-        this.setWarningText('Here is a warning!')
+  const stepDocumentIds = new Map(
+    stepDocuments.map((stepDocument, i) => [stepDocument.segments, `_cucumber_${i}`])
+  )
+
+  Blockly.Blocks['scenario'] = {
+    init: function (this: Blockly.Block) {
+      this.appendDummyInput()
+        .appendField('Scenario:')
+        .appendField(new Blockly.FieldTextInput('The one where...'), 'SCENARIO_NAME')
+      this.appendStatementInput('STEPS').setCheck('STEP')
+      this.setColour(135)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    },
+  }
+
+  Blockly.Blocks['step'] = {
+    init: function (this: Blockly.Block) {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const block = this
+      const blocklyInput = this.appendDummyInput()
+
+      const stepTextInput = new Blockly.FieldTextInput('')
+
+      const widgetCreate_ = stepTextInput.widgetCreate_.bind(stepTextInput)
+      stepTextInput.widgetCreate_ = function () {
+        const input = widgetCreate_()
+
+        const autocompleteResult = autocomplete<SuggestAutocompleteItem>({
+          input,
+          minLength: 1,
+          showOnFocus: true,
+          preventSubmit: false,
+          // https://github.com/kraaden/autocomplete/issues/31
+          customize(input, inputRect, container) {
+            container.style.width = '250px'
+          },
+          fetch: function (text, update) {
+            const stepDocuments = index(text) || []
+            const suggestions: SuggestAutocompleteItem[] = stepDocuments.map((stepDocument) => ({
+              label: stepDocument.suggestion,
+              segments: stepDocument.segments,
+            }))
+            update(suggestions)
+          },
+          onSelect: function (item) {
+            input.value = item.label
+
+            const blockId = stepDocumentIds.get(item.segments)
+            if (!blockId) throw new Error(`No id for stepDocument ${item.label}`)
+            const newBlock = block.workspace.newBlock(blockId)
+            newBlock.setFieldValue(block.getFieldValue('STEP_KEYWORD'), 'STEP_KEYWORD')
+            // @ts-ignore
+            newBlock.initSvg()
+            // @ts-ignore
+            newBlock.render()
+
+            // Replace this block with the new one
+            block.previousConnection
+              .targetBlock()
+              .nextConnection.connect(newBlock.previousConnection)
+            block.dispose(true)
+            autocompleteResult.destroy()
+
+            Blockly.WidgetDiv.hide()
+            Blockly.DropDownDiv.hideWithoutAnimation()
+          },
+        })
+
+        return input
       }
-      if (stepText === 'cukes') {
-        const blockName = 'step_cukes_in_belly'
 
-        const childBlock = this.workspace.newBlock(blockName)
-        childBlock.setFieldValue(this.getFieldValue('STEP_KEYWORD'), 'STEP_KEYWORD')
-        // @ts-ignore
-        childBlock.initSvg()
-        // @ts-ignore
-        childBlock.render()
+      blocklyInput
+        .appendField(
+          new Blockly.FieldDropdown([
+            ['Given', 'GIVEN'],
+            ['When', 'WHEN'],
+            ['Then', 'THEN'],
+          ]),
+          'STEP_KEYWORD'
+        )
+        .appendField(stepTextInput, 'STEP_TEXT')
+      this.setPreviousStatement(true, 'STEP')
+      this.setNextStatement(true, 'STEP')
+      this.setColour(270)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    },
+  }
 
-        // Replace this block with the new one
-        this.previousConnection.targetBlock().nextConnection.connect(childBlock.previousConnection)
-        this.dispose(true)
-      }
+  for (const stepDocument of stepDocuments) {
+    const blockId = stepDocumentIds.get(stepDocument.segments)
+    if (!blockId) throw new Error(`No id for stepDocument ${stepDocument.suggestion}`)
+    Blockly.Blocks[blockId] = {
+      init: function (this: Blockly.Block) {
+        const dummyInput = this.appendDummyInput()
+        dummyInput.appendField(
+          new Blockly.FieldDropdown([
+            ['Given', 'GIVEN'],
+            ['When', 'WHEN'],
+            ['Then', 'THEN'],
+          ]),
+          'STEP_KEYWORD'
+        )
+        let i = 1
+        for (const segment of stepDocument.segments) {
+          if (typeof segment === 'string') {
+            dummyInput.appendField(new Blockly.FieldLabelSerializable(segment), `STEP_FIELD_${i++}`)
+          } else {
+            dummyInput.appendField(new Blockly.FieldTextInput(segment[0]), `STEP_FIELD_${i++}`)
+          }
+        }
+
+        this.setPreviousStatement(true, 'STEP')
+        this.setNextStatement(true, 'STEP')
+        this.setColour(270)
+        this.setTooltip('I have {int} cukes in my {word}')
+        this.setHelpUrl('')
+      },
     }
-
-    input
-      .appendField(
-        new Blockly.FieldDropdown([
-          ['Given', 'GIVEN'],
-          ['When', 'WHEN'],
-          ['Then', 'THEN'],
-        ]),
-        'STEP_KEYWORD'
-      )
-      .appendField(stepTextInput, 'STEP_TEXT')
-    this.setPreviousStatement(true, 'STEP')
-    this.setNextStatement(true, 'STEP')
-    this.setColour(270)
-    this.setTooltip('')
-    this.setHelpUrl('')
-  },
-}
-
-Blockly.Blocks['step_cukes_in_belly'] = {
-  init: function (this: Blockly.Block) {
-    this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldDropdown([
-          ['Given', 'GIVEN'],
-          ['When', 'WHEN'],
-          ['Then', 'THEN'],
-        ]),
-        'STEP_KEYWORD'
-      )
-      .appendField(new Blockly.FieldLabelSerializable('I have '), 'TEXT1')
-      .appendField(new Blockly.FieldTextInput('42'), 'ARG1')
-      .appendField(new Blockly.FieldLabelSerializable(' cukes in my '), 'TEXT2')
-      .appendField(new Blockly.FieldTextInput('belly'), 'ARG2')
-    this.setPreviousStatement(true, 'STEP')
-    this.setNextStatement(true, 'STEP')
-    this.setColour(270)
-    this.setTooltip('I have {int} cukes in my {word}')
-    this.setHelpUrl('')
-  },
+  }
 }

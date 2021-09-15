@@ -24,8 +24,12 @@
   "author": "Aslak Hellesøy",
   "license": "MIT",
   "dependencies": {
-    "@cucumber/messages": "^17.1.0",
+    "@cucumber/cucumber-expressions": "^13.0.1",
     "@cucumber/gherkin-utils": "^7.0.0",
+    "@cucumber/language-service": "^0.2.0",
+    "@cucumber/messages": "^17.1.0",
+    "@cucumber/suggest": "^0.0.4",
+    "autocompleter": "^6.1.2",
     "blockly": "^6.20210701.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"

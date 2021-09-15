@@ -1,36 +1,52 @@
-import '../src/defineBlocks.js'
-
+import {
+  Expression,
+  ExpressionFactory,
+  ParameterTypeRegistry,
+} from '@cucumber/cucumber-expressions'
 import { pretty } from '@cucumber/gherkin-utils'
 import { GherkinDocument } from '@cucumber/messages'
+import { buildStepDocuments } from '@cucumber/suggest'
 import React, { useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 
 import BlocklyComponent from '../src/BlocklyComponent'
+import { defineBlocks } from '../src/defineBlocks.js'
 
 const toolbox = `
 <xml xmlns="https://developers.google.com/blockly/xml">
   <block type="scenario"/>
   <block type="step"/>
-  <block type="step_cukes_in_belly"/>
 </xml>
 `
+
+// Build some sample step texts and cucumber expressions. These would typically come from a stream
+// of Cucumber Messages.
+const ef = new ExpressionFactory(new ParameterTypeRegistry())
+const expressions: Expression[] = [
+  ef.createExpression('I have {int} cukes in my belly'),
+  ef.createExpression('there are {int} blind mice'),
+]
+const stepDocuments = buildStepDocuments(
+  ['I have 42 cukes in my belly', 'I have 96 cukes in my belly', 'there are 38 blind mice'],
+  expressions
+)
+defineBlocks(stepDocuments)
 
 const App: React.FunctionComponent = () => {
   const [workspaceXml, setWorkspaceXml] = useState(`
     <xml xmlns="https://developers.google.com/blockly/xml">
-      <block type="scenario" id="1" x="20" y="20">
+      <block type="scenario" id="H]D);F2kYo=xCdjp;[,}" x="78" y="-25">
         <field name="SCENARIO_NAME">The one where...</field>
         <statement name="STEPS">
-          <block type="step_cukes_in_belly" id="ocA!S!M7spvvYMtZWVyI">
+          <block type="step" id="7n3=OA!N#Yx.cyUYC^y5">
             <field name="STEP_KEYWORD">GIVEN</field>
-            <field name="TEXT1">I have </field>
-            <field name="ARG1">99</field>
-            <field name="TEXT2"> cukes in my </field>
-            <field name="ARG2">bag</field>
+            <field name="STEP_TEXT">this is an undefined step</field>
             <next>
-              <block type="step" id="n/BF;iqZ;SaE1l)8{J6+">
+              <block type="_cucumber_0" id="/fSm?XET8tbqrFUS24WH">
                 <field name="STEP_KEYWORD">WHEN</field>
-                <field name="STEP_TEXT">type here...</field>
+                <field name="STEP_FIELD_1">I have </field>
+                <field name="STEP_FIELD_2">8899</field>
+                <field name="STEP_FIELD_3"> cukes in my belly</field>
               </block>
             </next>
           </block>
