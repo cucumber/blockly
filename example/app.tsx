@@ -14,6 +14,9 @@ import { defineBlocks } from '../src/defineBlocks.js'
 
 const toolbox = `
 <xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="feature"/>
+  <block type="rule"/>
+  <block type="background"/>
   <block type="scenario"/>
   <block type="step"/>
 </xml>

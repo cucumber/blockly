@@ -14,12 +14,54 @@ export function defineBlocks(stepDocuments: readonly StepDocument[]) {
     stepDocuments.map((stepDocument, i) => [stepDocument.segments, `_cucumber_${i}`])
   )
 
+  Blockly.Blocks['feature'] = {
+    init: function (this: Blockly.Block) {
+      this.appendDummyInput()
+        .appendField('Feature:')
+        .appendField(new Blockly.FieldTextInput('Something amazing...'), 'FEATURE_NAME')
+      this.appendStatementInput('CHILDREN').setCheck(['BACKGROUND', 'RULE', 'SCENARIO'])
+      this.setColour(235)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    },
+  }
+
+  Blockly.Blocks['rule'] = {
+    init: function (this: Blockly.Block) {
+      this.appendDummyInput()
+        .appendField('Rule:')
+        .appendField(new Blockly.FieldTextInput('Only...'), 'RULE_NAME')
+      this.appendStatementInput('CHILDREN').setCheck(['BACKGROUND', 'SCENARIO'])
+      this.setPreviousStatement(true, 'RULE')
+      this.setNextStatement(true, ['RULE', 'SCENARIO'])
+      this.setColour(35)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    },
+  }
+
+  Blockly.Blocks['background'] = {
+    init: function (this: Blockly.Block) {
+      this.appendDummyInput()
+        .appendField('Background:')
+        .appendField(new Blockly.FieldTextInput('Always...'), 'BACKGROUND_NAME')
+      this.appendStatementInput('STEPS').setCheck('STEP')
+      this.setPreviousStatement(true, 'BACKGROUND')
+      this.setNextStatement(true, ['RULE', 'SCENARIO'])
+      this.setColour(0)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    },
+  }
+
   Blockly.Blocks['scenario'] = {
     init: function (this: Blockly.Block) {
       this.appendDummyInput()
         .appendField('Scenario:')
         .appendField(new Blockly.FieldTextInput('The one where...'), 'SCENARIO_NAME')
       this.appendStatementInput('STEPS').setCheck('STEP')
+      this.setPreviousStatement(true, 'SCENARIO')
+      this.setNextStatement(true, 'SCENARIO')
       this.setColour(135)
       this.setTooltip('')
       this.setHelpUrl('')
