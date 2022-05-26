@@ -1,5 +1,6 @@
 import { FeatureChild, GherkinDocument, Location, Scenario, Step } from '@cucumber/messages'
 import Blockly from 'blockly'
+import { Field } from 'core/field'
 
 const location: Location = {
   line: -1,
@@ -59,7 +60,7 @@ export function toStep(block: Blockly.Block): Step {
   const keyword = StepKeywordByType[dummyInput.fieldRow[0].getValue()]
   const text = dummyInput.fieldRow
     .slice(1)
-    .map((field) => field.getValue())
+    .map((field: Field) => field.getValue())
     .join('')
 
   return {

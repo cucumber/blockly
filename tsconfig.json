@@ -16,6 +16,7 @@
     "downlevelIteration": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true
   }
 }

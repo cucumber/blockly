@@ -1,17 +1,14 @@
 import 'blockly/blocks'
 
+import { Suggestion } from '@cucumber/language-service'
 import { GherkinDocument } from '@cucumber/messages'
-import { BlocklyOptions } from 'blockly/blockly'
-import Blockly from 'blockly/core'
-import locale from 'blockly/msg/en'
+import Blockly from 'blockly'
+import { BlocklyOptions } from 'core/blockly_options'
 import React, { useEffect } from 'react'
-
-import { toGherkinDocument } from './toGherkin'
-
-Blockly.setLocale(locale)
 
 type Props = {
   workspaceXml: string
+  suggestions: readonly Suggestion[]
   setWorkspaceXml: (xml: string) => void
   setGherkinDocuments: (gherkinDocument: readonly GherkinDocument[]) => void
   options: BlocklyOptions
@@ -19,15 +16,26 @@ type Props = {
 
 const BlocklyComponent: React.FunctionComponent<Props> = ({
   workspaceXml,
+  suggestions,
   setWorkspaceXml,
   setGherkinDocuments,
   options,
 }) => {
+  const toolbox = `
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="feature"/>
+  <block type="rule"/>
+  <block type="background"/>
+  <block type="scenario"/>
+  <block type="step"/>
+  ${suggestions.map((suggestion) => `<block type="${suggestion.label}"/>`)}
+</xml>
+`
   const blocklyDiv = React.createRef<HTMLDivElement>()
 
   useEffect(() => {
     if (!blocklyDiv.current) return
-    const workspace = Blockly.inject(blocklyDiv.current, options)
+    const workspace = Blockly.inject(blocklyDiv.current, { ...options, toolbox })
 
     // @ts-ignore
     workspace.addChangeListener((event) => {
@@ -35,12 +43,12 @@ const BlocklyComponent: React.FunctionComponent<Props> = ({
         // no-op
       }
 
-      const xml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace))
-      const blocks = workspace.getTopBlocks(true)
-      const gherkinDocuments = blocks.map((block) => toGherkinDocument(block))
-
-      setWorkspaceXml(xml)
-      setGherkinDocuments(gherkinDocuments)
+      // const xml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace))
+      // const blocks = workspace.getTopBlocks(true)
+      // const gherkinDocuments = blocks.map((block) => toGherkinDocument(block))
+      //
+      // setWorkspaceXml(xml)
+      // setGherkinDocuments(gherkinDocuments)
     })
 
     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(workspaceXml), workspace)
