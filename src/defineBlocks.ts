@@ -6,37 +6,9 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
     init: function (this: Blockly.Block) {
       this.appendDummyInput()
         .appendField('Feature:')
-        .appendField(new Blockly.FieldTextInput('Something amazing...'), 'FEATURE_NAME')
-      this.appendStatementInput('CHILDREN').setCheck(['BACKGROUND', 'RULE', 'SCENARIO'])
+        .appendField(new Blockly.FieldTextInput('Something amazing...'), 'NAME')
+      this.appendStatementInput('CHILDREN').setCheck(['background', 'rule', 'scenario'])
       this.setColour(235)
-      this.setTooltip('')
-      this.setHelpUrl('')
-    },
-  }
-
-  Blockly.Blocks['rule'] = {
-    init: function (this: Blockly.Block) {
-      this.appendDummyInput()
-        .appendField('Rule:')
-        .appendField(new Blockly.FieldTextInput('Only...'), 'RULE_NAME')
-      this.appendStatementInput('CHILDREN').setCheck(['BACKGROUND', 'SCENARIO'])
-      this.setPreviousStatement(true, 'RULE')
-      this.setNextStatement(true, ['RULE', 'SCENARIO'])
-      this.setColour(35)
-      this.setTooltip('')
-      this.setHelpUrl('')
-    },
-  }
-
-  Blockly.Blocks['background'] = {
-    init: function (this: Blockly.Block) {
-      this.appendDummyInput()
-        .appendField('Background:')
-        .appendField(new Blockly.FieldTextInput('Always...'), 'BACKGROUND_NAME')
-      this.appendStatementInput('STEPS').setCheck('STEP')
-      this.setPreviousStatement(true, 'BACKGROUND')
-      this.setNextStatement(true, ['RULE', 'SCENARIO'])
-      this.setColour(0)
       this.setTooltip('')
       this.setHelpUrl('')
     },
@@ -46,11 +18,39 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
     init: function (this: Blockly.Block) {
       this.appendDummyInput()
         .appendField('Scenario:')
-        .appendField(new Blockly.FieldTextInput('The one where...'), 'SCENARIO_NAME')
+        .appendField(new Blockly.FieldTextInput('The one where...'), 'NAME')
       this.appendStatementInput('STEPS').setCheck('STEP')
-      this.setPreviousStatement(true, 'SCENARIO')
-      this.setNextStatement(true, 'SCENARIO')
+      this.setPreviousStatement(true, 'scenario')
+      this.setNextStatement(true, 'scenario')
       this.setColour(135)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    },
+  }
+
+  Blockly.Blocks['rule'] = {
+    init: function (this: Blockly.Block) {
+      this.appendDummyInput()
+        .appendField('rule:')
+        .appendField(new Blockly.FieldTextInput('Only...'), 'NAME')
+      this.appendStatementInput('CHILDREN').setCheck(['background', 'SCENARIO'])
+      this.setPreviousStatement(true, 'rule')
+      this.setNextStatement(true, ['rule', 'SCENARIO'])
+      this.setColour(35)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    },
+  }
+
+  Blockly.Blocks['background'] = {
+    init: function (this: Blockly.Block) {
+      this.appendDummyInput()
+        .appendField('background:')
+        .appendField(new Blockly.FieldTextInput('Always...'), 'NAME')
+      this.appendStatementInput('STEPS').setCheck('STEP')
+      this.setPreviousStatement(true, 'background')
+      this.setNextStatement(true, ['rule', 'SCENARIO'])
+      this.setColour(0)
       this.setTooltip('')
       this.setHelpUrl('')
     },
@@ -61,13 +61,13 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
       const dummyInput = this.appendDummyInput()
       dummyInput.appendField(
         new Blockly.FieldDropdown([
-          ['Given', 'GIVEN'],
-          ['When', 'WHEN'],
-          ['Then', 'THEN'],
+          ['Given', 'Given'],
+          ['When', 'When'],
+          ['Then', 'Then'],
         ]),
         'STEP_KEYWORD'
       )
-      dummyInput.appendField(new Blockly.FieldTextInput(''), `STEP_TEXT`)
+      dummyInput.appendField(new Blockly.FieldTextInput('...'), `STEP_TEXT`)
 
       this.setPreviousStatement(true, 'STEP')
       this.setNextStatement(true, 'STEP')
@@ -83,9 +83,9 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
         const dummyInput = this.appendDummyInput()
         dummyInput.appendField(
           new Blockly.FieldDropdown([
-            ['Given', 'GIVEN'],
-            ['When', 'WHEN'],
-            ['Then', 'THEN'],
+            ['Given', 'Given'],
+            ['When', 'When'],
+            ['Then', 'Then'],
           ]),
           'STEP_KEYWORD'
         )

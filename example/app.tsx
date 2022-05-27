@@ -4,8 +4,7 @@ import {
   ParameterTypeRegistry,
 } from '@cucumber/cucumber-expressions'
 import { pretty } from '@cucumber/gherkin-utils'
-import { buildSuggestions } from '@cucumber/language-service'
-import { GherkinDocument } from '@cucumber/messages'
+import { buildSuggestions, parseGherkinDocument } from '@cucumber/language-service'
 import React, { useMemo, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -30,33 +29,16 @@ defineBlocks(suggestions)
 const App: React.FunctionComponent = () => {
   const [workspaceXml, setWorkspaceXml] = useState(`
     <xml xmlns="https://developers.google.com/blockly/xml">
-<!--      <block type="scenario" id="0V5*@yYI7-3LDlQ~%cP." x="76" y="101">-->
-<!--        <field name="SCENARIO_NAME">The one where...</field>-->
-<!--        <statement name="STEPS">-->
-<!--          <block type="I have {int} cukes in my {word}" id="f$CNPC;*bML~99P_\`prh">-->
-<!--            <field name="STEP_KEYWORD">GIVEN</field>-->
-<!--            <field name="STEP_FIELD_1">I have </field>-->
-<!--            <field name="STEP_FIELD_2">38</field>-->
-<!--            <field name="STEP_FIELD_3"> cukes in my belly</field>-->
-<!--            <next>-->
-<!--              <block type="there are {int} blind mice" id="@}nG:J{47KEaPV.uV2P\`">-->
-<!--                <field name="STEP_KEYWORD">GIVEN</field>-->
-<!--                <field name="STEP_FIELD_1">there are </field>-->
-<!--                <field name="STEP_FIELD_2">38</field>-->
-<!--                <field name="STEP_FIELD_3"> blind mice</field>-->
-<!--                <next></next>-->
-<!--              </block>-->
-<!--            </next>-->
-<!--          </block>-->
-<!--        </statement>-->
-<!--      </block>-->
     </xml>
   `)
-  const [gherkinDocuments, setGherkinDocuments] = useState<readonly GherkinDocument[]>([])
+  const [gherkinSources, setGherkinSources] = useState<readonly string[]>([])
 
-  const gherkinSource = useMemo(() => {
-    return gherkinDocuments.map((gherkinDocument) => pretty(gherkinDocument)).join('\n')
-  }, [gherkinDocuments])
+  const prettyGherkinSources = useMemo(() => {
+    return gherkinSources.map((gherkinSource) => {
+      const parseResult = parseGherkinDocument(gherkinSource)
+      return parseResult.gherkinDocument ? pretty(parseResult.gherkinDocument) : gherkinSource
+    })
+  }, [gherkinSources])
 
   return (
     <div className="flex-container">
@@ -65,7 +47,7 @@ const App: React.FunctionComponent = () => {
           suggestions={suggestions}
           workspaceXml={workspaceXml}
           setWorkspaceXml={setWorkspaceXml}
-          setGherkinDocuments={setGherkinDocuments}
+          setGherkinSources={setGherkinSources}
           options={{
             readOnly: false,
             trashcan: true,
@@ -80,7 +62,11 @@ const App: React.FunctionComponent = () => {
       </div>
 
       <div className="flex-child">
-        <pre className="border">{gherkinSource}</pre>
+        {prettyGherkinSources.map((prettyGherkinSource, i) => (
+          <pre key={i} className="border">
+            {prettyGherkinSource}
+          </pre>
+        ))}
         <pre className="border">{workspaceXml}</pre>
       </div>
     </div>
