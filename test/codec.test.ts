@@ -124,16 +124,13 @@ Scenario: 2
       <xml xmlns="https://developers.google.com/blockly/xml">
         <block type="feature" id="uzkuY++o)BVr4Bf^o)cp" x="45" y="17">
           <field name="NAME">A</field>
-          <!-- 1 feature: scenarioParent --> 
           <statement name="CHILDREN">
             <block type="scenario" id="FG$LS]#eQ._:YxWuFIS.">
               <field name="NAME">B</field>
-              <!-- 2 scenario: stepParent -->
               <statement name="STEPS">
                 <block type="step" id="!+$IZnJ26R/#W3Ptal;s">
                   <field name="KEYWORD">Given</field>
                   <field name="TEXT">C</field>
-                  <!-- 3 step: stepParent -->
                   <next>
                     <block type="step" id="4)7xn:Vf1H[DI(S@d?~b">
                       <field name="KEYWORD">Given</field>
@@ -142,16 +139,13 @@ Scenario: 2
                   </next>
                 </block>
               </statement>
-              <!-- 2 scenario: scenarioParent -->
               <next>
                 <block type="scenario" id="Vvni@XgF3q?pa7_QrJc1">
                   <field name="NAME">E</field>
-                  <!-- 4 scenario: stepParent -->
                   <statement name="STEPS">
                     <block type="step" id="Vs5vfODMoMV;b^xXfSp#">
                       <field name="KEYWORD">Given</field>
                       <field name="TEXT">F</field>
-                      <!-- 5 step: stepParent -->
                       <next>
                         <block type="step" id="!J50%N-l+VCBjg]pawS4">
                           <field name="KEYWORD">Given</field>
