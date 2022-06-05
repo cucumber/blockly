@@ -1,7 +1,6 @@
 import 'blockly/blocks'
 
 import { Suggestion } from '@cucumber/language-service'
-import { GherkinDocument } from '@cucumber/messages'
 import Blockly from 'blockly'
 import { BlocklyOptions } from 'core/blockly_options'
 import React, { useEffect, useMemo } from 'react'
@@ -13,6 +12,7 @@ type Props = {
   suggestions: readonly Suggestion[]
   setWorkspaceXml: (xml: string) => void
   setGherkinSources: (gherkinSources: readonly string[]) => void
+  setError: (error: string | undefined) => void
   options: BlocklyOptions
 }
 
@@ -21,6 +21,7 @@ const BlocklyComponent: React.FunctionComponent<Props> = ({
   suggestions,
   setWorkspaceXml,
   setGherkinSources,
+  setError,
   options,
 }) => {
   const toolbox = useMemo(
@@ -52,8 +53,13 @@ const BlocklyComponent: React.FunctionComponent<Props> = ({
       setWorkspaceXml(xml)
 
       const blocks = workspace.getTopBlocks(true)
-      const gherkinSources = blocks.map((block: Blockly.Block) => generator.blockToCode(block))
-      setGherkinSources(gherkinSources)
+      try {
+        const gherkinSources = blocks.map((block: Blockly.Block) => generator.blockToCode(block))
+        setGherkinSources(gherkinSources)
+        setError(undefined)
+      } catch (err) {
+        setError(`${err.message}\n${err.stack}`)
+      }
     })
 
     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(workspaceXml), workspace)

@@ -5,7 +5,7 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
   Blockly.Blocks['feature'] = {
     init: function (this: Blockly.Block) {
       this.appendDummyInput()
-        .appendField('Feature:')
+        .appendField('Feature')
         .appendField(new Blockly.FieldTextInput('Something amazing...'), 'NAME')
       this.appendStatementInput('CHILDREN').setCheck(['background', 'rule', 'scenario'])
       this.setColour(235)
@@ -17,11 +17,11 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
   Blockly.Blocks['scenario'] = {
     init: function (this: Blockly.Block) {
       this.appendDummyInput()
-        .appendField('Scenario:')
+        .appendField('Scenario')
         .appendField(new Blockly.FieldTextInput('The one where...'), 'NAME')
-      this.appendStatementInput('STEPS').setCheck('STEP')
+      this.appendStatementInput('STEPS').setCheck('step')
       this.setPreviousStatement(true, 'scenario')
-      this.setNextStatement(true, 'scenario')
+      this.setNextStatement(true, ['rule', 'scenario'])
       this.setColour(135)
       this.setTooltip('')
       this.setHelpUrl('')
@@ -31,11 +31,11 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
   Blockly.Blocks['rule'] = {
     init: function (this: Blockly.Block) {
       this.appendDummyInput()
-        .appendField('rule:')
+        .appendField('Rule')
         .appendField(new Blockly.FieldTextInput('Only...'), 'NAME')
-      this.appendStatementInput('CHILDREN').setCheck(['background', 'SCENARIO'])
+      this.appendStatementInput('CHILDREN').setCheck(['background', 'scenario'])
       this.setPreviousStatement(true, 'rule')
-      this.setNextStatement(true, ['rule', 'SCENARIO'])
+      this.setNextStatement(true, ['rule'])
       this.setColour(35)
       this.setTooltip('')
       this.setHelpUrl('')
@@ -45,11 +45,11 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
   Blockly.Blocks['background'] = {
     init: function (this: Blockly.Block) {
       this.appendDummyInput()
-        .appendField('background:')
+        .appendField('Background')
         .appendField(new Blockly.FieldTextInput('Always...'), 'NAME')
-      this.appendStatementInput('STEPS').setCheck('STEP')
+      this.appendStatementInput('STEPS').setCheck('step')
       this.setPreviousStatement(true, 'background')
-      this.setNextStatement(true, ['rule', 'SCENARIO'])
+      this.setNextStatement(true, ['rule', 'scenario'])
       this.setColour(0)
       this.setTooltip('')
       this.setHelpUrl('')
@@ -65,12 +65,12 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
           ['When', 'When'],
           ['Then', 'Then'],
         ]),
-        'STEP_KEYWORD'
+        'KEYWORD'
       )
-      dummyInput.appendField(new Blockly.FieldTextInput('...'), `STEP_TEXT`)
+      dummyInput.appendField(new Blockly.FieldTextInput('...'), `TEXT`)
 
-      this.setPreviousStatement(true, 'STEP')
-      this.setNextStatement(true, 'STEP')
+      this.setPreviousStatement(true, 'step')
+      this.setNextStatement(true, 'step')
       this.setColour(300)
       this.setTooltip('generic step')
       this.setHelpUrl('')
@@ -87,7 +87,7 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
             ['When', 'When'],
             ['Then', 'Then'],
           ]),
-          'STEP_KEYWORD'
+          'KEYWORD'
         )
         let i = 1
         for (const segment of suggestion.segments) {

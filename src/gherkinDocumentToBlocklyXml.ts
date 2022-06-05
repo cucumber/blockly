@@ -2,108 +2,171 @@ import { walkGherkinDocument } from '@cucumber/gherkin-utils'
 import { GherkinDocument } from '@cucumber/messages'
 import Blockly from 'blockly'
 
-export function gherkinDocumentToBlocklyXml(gherkinDocument: GherkinDocument): Element {
-  const doc = Blockly.utils.xml.getDocument()
-  const xml = doc.documentElement
+type Parents = {
+  featureParent?: Element
+  ruleParent?: Element
+  scenarioParent?: Element
+  stepParent?: Element
+}
 
-  let parent = xml
+export function gherkinDocumentToBlocklyXml(gherkinDocument: GherkinDocument, xml: Element): void {
+  walkGherkinDocument<Parents>(
+    gherkinDocument,
+    { featureParent: xml },
+    {
+      feature(feature, parents) {
+        const block = Blockly.utils.xml.createElement('block')
+        block.setAttribute('type', 'feature')
+        block.setAttribute('id', feature.name) // TODO: Use uuid()
+        parents.featureParent?.appendChild(block)
 
-  walkGherkinDocument(gherkinDocument, undefined, {
-    feature(feature) {
-      const block = Blockly.utils.xml.createElement('block')
-      block.setAttribute('type', 'feature')
-      block.setAttribute('id', feature.name) // TODO: Use uuid()
+        const nameField = Blockly.utils.xml.createElement('field')
+        nameField.setAttribute('name', 'NAME')
+        nameField.innerHTML = feature.name
+        block.appendChild(nameField)
 
-      const field = Blockly.utils.xml.createElement('field')
-      field.setAttribute('name', 'NAME')
-      field.innerHTML = feature.name
-      block.appendChild(field)
+        const childrenStatement = Blockly.utils.xml.createElement('statement')
+        childrenStatement.setAttribute('name', 'CHILDREN')
+        block.appendChild(childrenStatement)
 
-      const statement = Blockly.utils.xml.createElement('statement')
-      statement.setAttribute('name', 'CHILDREN')
-      block.appendChild(statement)
+        return { ...parents, scenarioParent: childrenStatement, ruleParent: childrenStatement }
+      },
+      rule(rule, parents) {
+        const block = Blockly.utils.xml.createElement('block')
+        block.setAttribute('type', 'rule')
+        block.setAttribute('id', rule.id)
+        parents.ruleParent?.appendChild(block)
 
-      parent.appendChild(block)
-      parent = statement
-    },
-    scenario(scenario) {
-      const block = Blockly.utils.xml.createElement('block')
-      block.setAttribute('type', 'scenario')
-      block.setAttribute('id', scenario.id)
+        const nameField = Blockly.utils.xml.createElement('field')
+        nameField.setAttribute('name', 'NAME')
+        nameField.innerHTML = rule.name
+        block.appendChild(nameField)
 
-      const field = Blockly.utils.xml.createElement('field')
-      field.setAttribute('name', 'NAME')
-      field.innerHTML = scenario.name
-      block.appendChild(field)
+        const childrenStatement = Blockly.utils.xml.createElement('statement')
+        childrenStatement.setAttribute('name', 'CHILDREN')
+        block.appendChild(childrenStatement)
 
-      // const statement = Blockly.utils.xml.createElement('statement')
-      // statement.setAttribute('name', 'STEPS')
-      // block.appendChild(statement)
-      const next = Blockly.utils.xml.createElement('next')
-      block.appendChild(next)
+        const next = Blockly.utils.xml.createElement('next')
+        block.appendChild(next)
 
-      parent.appendChild(block)
-      parent = next
-    },
-    step(step) {
-      const block = Blockly.utils.xml.createElement('block')
+        return { ...parents, scenarioParent: childrenStatement, ruleParent: next }
+      },
+      scenario(scenario, parents) {
+        const block = Blockly.utils.xml.createElement('block')
+        block.setAttribute('type', 'scenario')
+        block.setAttribute('id', scenario.id)
+        parents.scenarioParent?.appendChild(block)
 
-      const field = Blockly.utils.xml.createElement('field')
-      field.setAttribute('name', 'STEP_KEYWORD')
-      field.innerHTML = 'GIVEN'
-      block.appendChild(field)
+        const nameField = Blockly.utils.xml.createElement('field')
+        nameField.setAttribute('name', 'NAME')
+        nameField.innerHTML = scenario.name
+        block.appendChild(nameField)
 
-      // for (const suggestion of suggestions) {
-      //   const args = suggestion.expression.match(step.text)
-      //   if (args != null) {
-      //     let offset = 0
-      //     let fieldCounter = 1
-      //     for (const arg of args) {
-      //       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      //       if (arg.group.start! > 0) {
-      //         const textField = Blockly.utils.xml.createElement('field')
-      //         textField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
-      //         textField.innerHTML = step.text.substring(0, arg.group.start)
-      //         stepBlock.appendChild(textField)
-      //       }
+        const stepsStatement = Blockly.utils.xml.createElement('statement')
+        stepsStatement.setAttribute('name', 'STEPS')
+        block.appendChild(stepsStatement)
+
+        const next = Blockly.utils.xml.createElement('next')
+        block.appendChild(next)
+
+        return { ...parents, ruleParent: next, scenarioParent: next, stepParent: stepsStatement }
+      },
+      background(background, parents) {
+        const block = Blockly.utils.xml.createElement('block')
+        block.setAttribute('type', 'background')
+        block.setAttribute('id', background.id)
+        parents.scenarioParent?.appendChild(block)
+
+        const nameField = Blockly.utils.xml.createElement('field')
+        nameField.setAttribute('name', 'NAME')
+        nameField.innerHTML = background.name
+        block.appendChild(nameField)
+
+        const stepsStatement = Blockly.utils.xml.createElement('statement')
+        stepsStatement.setAttribute('name', 'STEPS')
+        block.appendChild(stepsStatement)
+
+        const next = Blockly.utils.xml.createElement('next')
+        block.appendChild(next)
+
+        return { ...parents, ruleParent: next, scenarioParent: next, stepParent: stepsStatement }
+      },
+      // background(background, parents) {
+      //   const block = Blockly.utils.xml.createElement('block')
+      //   block.setAttribute('type', 'background')
+      //   block.setAttribute('id', background.id)
+      //   parents.scenarioParent?.appendChild(block)
       //
-      //       const argField = Blockly.utils.xml.createElement('field')
-      //       argField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
-      //       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      //       argField.innerHTML = arg.group.value!
-      //       stepBlock.appendChild(argField)
+      //   const nameField = Blockly.utils.xml.createElement('field')
+      //   nameField.setAttribute('name', 'NAME')
+      //   nameField.innerHTML = background.name
+      //   block.appendChild(nameField)
       //
-      //       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      //       offset = arg.group.end!
-      //     }
-      //     const suffix = step.text.substring(offset)
-      //     if (suffix !== '') {
-      //       const textField = Blockly.utils.xml.createElement('field')
-      //       textField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
-      //       textField.innerHTML = suffix
-      //       stepBlock.appendChild(textField)
-      //     }
-      //     stepBlock.setAttribute('type', suggestion.label)
-      //     break
-      //   }
-      // }
-      if (block.getAttribute('type') === null) {
+      //   const stepsStatement = Blockly.utils.xml.createElement('statement')
+      //   stepsStatement.setAttribute('name', 'STEPS')
+      //   block.appendChild(stepsStatement)
+      //
+      //   const next = Blockly.utils.xml.createElement('next')
+      //   block.appendChild(next)
+      //
+      //   return { ...parents, scenarioParent: next, stepParent: stepsStatement }
+      // },
+      step(step, parents) {
+        const block = Blockly.utils.xml.createElement('block')
         block.setAttribute('type', 'step')
+        block.setAttribute('id', step.id)
+        parents.stepParent?.appendChild(block)
+
+        const nameField = Blockly.utils.xml.createElement('field')
+        nameField.setAttribute('name', 'KEYWORD')
+        nameField.innerHTML = step.keyword.trim() // TODO: Deal with (non)-spaces somehow
+        block.appendChild(nameField)
 
         const textField = Blockly.utils.xml.createElement('field')
-        textField.setAttribute('name', `STEP_TEXT`)
+        textField.setAttribute('name', `TEXT`)
         textField.innerHTML = step.text
         block.appendChild(textField)
-      }
 
-      block.setAttribute('id', step.id)
-      parent.appendChild(block)
+        const next = Blockly.utils.xml.createElement('next')
+        block.appendChild(next)
 
-      const next = Blockly.utils.xml.createElement('next')
-      block.appendChild(next)
-      parent = next
-    },
-  })
-
-  return xml
+        return { ...parents, stepParent: next }
+      },
+    }
+  )
 }
+
+// for (const suggestion of suggestions) {
+//   const args = suggestion.expression.match(step.text)
+//   if (args != null) {
+//     let offset = 0
+//     let fieldCounter = 1
+//     for (const arg of args) {
+//       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//       if (arg.group.start! > 0) {
+//         const textField = Blockly.utils.xml.createElement('field')
+//         textField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
+//         textField.innerHTML = step.text.substring(0, arg.group.start)
+//         stepBlock.appendChild(textField)
+//       }
+//
+//       const argField = Blockly.utils.xml.createElement('field')
+//       argField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
+//       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//       argField.innerHTML = arg.group.value!
+//       stepBlock.appendChild(argField)
+//
+//       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//       offset = arg.group.end!
+//     }
+//     const suffix = step.text.substring(offset)
+//     if (suffix !== '') {
+//       const textField = Blockly.utils.xml.createElement('field')
+//       textField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
+//       textField.innerHTML = suffix
+//       stepBlock.appendChild(textField)
+//     }
+//     stepBlock.setAttribute('type', suggestion.label)
+//     break
+//   }
+// }

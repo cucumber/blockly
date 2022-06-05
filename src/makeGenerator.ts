@@ -10,11 +10,29 @@ export function makeGenerator(suggestions: readonly Suggestion[]) {
     const name = block.getFieldValue('NAME')
     return `${keyword} ${name}\n${children}`
   }
-  generator['scenario'] = (block: Blockly.Block) => {
+  generator['rule'] = (block: Blockly.Block) => {
     const children = generator.statementToCode(block, 'CHILDREN')
+    const keyword = 'Rule:'
+    const name = block.getFieldValue('NAME')
+    return `${keyword} ${name}\n${children}`
+  }
+  generator['background'] = (block: Blockly.Block) => {
+    const children = generator.statementToCode(block, 'STEPS')
+    const keyword = 'Background:'
+    const name = block.getFieldValue('NAME')
+    return `${keyword} ${name}\n${children}`
+  }
+  generator['scenario'] = (block: Blockly.Block) => {
+    const children = generator.statementToCode(block, 'STEPS')
     const keyword = 'Scenario:'
     const name = block.getFieldValue('NAME')
     return `${keyword} ${name}\n${children}`
+  }
+  generator['step'] = (block: Blockly.Block) => {
+    const stepArg = generator.statementToCode(block, 'STEP_ARG')
+    const keyword = block.getFieldValue('KEYWORD')
+    const text = block.getFieldValue('TEXT')
+    return `${keyword} ${text}\n${stepArg}`
   }
 
   // https://blocklycodelabs.dev/codelabs/custom-generator/index.html?index=..%2F..index#8

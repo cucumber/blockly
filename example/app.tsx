@@ -32,6 +32,7 @@ const App: React.FunctionComponent = () => {
     </xml>
   `)
   const [gherkinSources, setGherkinSources] = useState<readonly string[]>([])
+  const [error, setError] = useState<string | undefined>()
 
   const prettyGherkinSources = useMemo(() => {
     return gherkinSources.map((gherkinSource) => {
@@ -48,6 +49,7 @@ const App: React.FunctionComponent = () => {
           workspaceXml={workspaceXml}
           setWorkspaceXml={setWorkspaceXml}
           setGherkinSources={setGherkinSources}
+          setError={setError}
           options={{
             readOnly: false,
             trashcan: true,
@@ -62,6 +64,7 @@ const App: React.FunctionComponent = () => {
       </div>
 
       <div className="flex-child">
+        {error && <pre className="border">{error}</pre>}
         {prettyGherkinSources.map((prettyGherkinSource, i) => (
           <pre key={i} className="border">
             {prettyGherkinSource}

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "start": "esbuild example/app.tsx --bundle --outdir=example/js --servedir=example",
+    "start": "esbuild example/app.tsx --bundle --outdir=example/js --servedir=example --sourcemap=inline",
     "postinstall": "cp -r node_modules/blockly/media example/media",
     "eslint-fix": "eslint --ext ts,tsx --max-warnings 0 --fix src test example",
     "eslint": "eslint --ext ts,tsx --max-warnings 0 src test example",
