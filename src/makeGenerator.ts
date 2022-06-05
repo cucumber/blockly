@@ -46,7 +46,7 @@ export function makeGenerator(suggestions: readonly Suggestion[]) {
 
   for (const suggestion of suggestions) {
     generator[suggestion.label] = (block: Blockly.Block) => {
-      const keyword = block.getFieldValue('STEP_KEYWORD')
+      const keyword = block.getFieldValue('KEYWORD')
       let code = `${keyword} `
 
       let i = 1
@@ -58,13 +58,6 @@ export function makeGenerator(suggestions: readonly Suggestion[]) {
         }
       }
       code += '\n'
-
-      let childBlock = (block.childBlocks_ || [])[0]
-      while (childBlock) {
-        code += generator[childBlock.type](childBlock)
-        childBlock = childBlock.getNextBlock()
-      }
-
       return code
     }
   }

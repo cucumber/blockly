@@ -17,12 +17,13 @@ import { makeGenerator } from '../src/makeGenerator.js'
 
 describe('codec', () => {
   let suggestions: readonly Suggestion[]
+  let expressions: readonly Expression[]
 
   beforeEach(() => {
     const registry = new ParameterTypeRegistry()
     const ef = new ExpressionFactory(registry)
-    const expressions: Expression[] = [
-      ef.createExpression('I have {int} cukes in my belly'),
+    expressions = [
+      ef.createExpression('I have {int} cukes in my {word}'),
       ef.createExpression('there are {int} blind mice'),
     ]
     suggestions = buildSuggestions(
@@ -55,7 +56,7 @@ describe('codec', () => {
 Scenario: 1
 Scenario: 2
 `
-    assertRoundtrip(xml, expectedCode, suggestions)
+    assertRoundtrip(xml, expectedCode, suggestions, expressions)
   })
 
   it('roundtrips feature/rule/scenario/step', () => {
@@ -88,7 +89,37 @@ Scenario: 2
           Scenario: R
             Given S
 `
-    assertRoundtrip(xml, expectedCode, suggestions)
+    assertRoundtrip(xml, expectedCode, suggestions, expressions)
+  })
+
+  it('roundtrips a step with parameters', () => {
+    const xml = `
+      <xml xmlns="https://developers.google.com/blockly/xml">
+        <block type="feature" id="!T1gX,y)?y=\`x(|v2eAL" x="27" y="28">
+          <field name="NAME">Something amazing...</field>
+          <statement name="CHILDREN">
+            <block type="scenario" id="+Rr,D54:8_L]Vj?u@q(i">
+              <field name="NAME">The one where...</field>
+              <statement name="STEPS">
+                <block type="I have {int} cukes in my {word}" id="ww@yPrvYn/8fMOu;g1vG">
+                  <field name="KEYWORD">Given</field>
+                  <field name="STEP_FIELD_1">I have </field>
+                  <field name="STEP_FIELD_2">38</field>
+                  <field name="STEP_FIELD_3"> cukes in my </field>
+                  <field name="STEP_FIELD_4">belly</field>
+                </block>
+              </statement>
+            </block>
+          </statement>
+        </block>
+      </xml>
+    `
+    const expectedCode = `
+      Feature: Something amazing...
+        Scenario: The one where...
+          Given I have 38 cukes in my belly
+`
+    assertRoundtrip(xml, expectedCode, suggestions, expressions)
   })
 
   it('roundtrips a background with a step', () => {
@@ -116,7 +147,7 @@ Scenario: 2
         Background: O
           Given P
     `
-    assertRoundtrip(xml, expectedCode, suggestions)
+    assertRoundtrip(xml, expectedCode, suggestions, expressions)
   })
 
   it('roundtrips a two scenarios with two steps', () => {
@@ -173,7 +204,7 @@ Scenario: 2
           Given F
           Given G
     `
-    assertRoundtrip(xml, expectedCode, suggestions)
+    assertRoundtrip(xml, expectedCode, suggestions, expressions)
   })
 
   it('roundtrips a background and a scenario', () => {
@@ -215,7 +246,7 @@ Scenario: 2
         Scenario: Q
           Given R
     `
-    assertRoundtrip(xml, expectedCode, suggestions)
+    assertRoundtrip(xml, expectedCode, suggestions, expressions)
   })
 
   it('roundtrips a scenario followed by a rule', () => {
@@ -264,7 +295,7 @@ Scenario: 2
           Scenario: R
             Given S
     `
-    assertRoundtrip(xml, expectedCode, suggestions)
+    assertRoundtrip(xml, expectedCode, suggestions, expressions)
   })
 
   it('roundtrips a complex scenario', () => {
@@ -368,11 +399,16 @@ Scenario: 2
       Given M
       Given N
 `
-    assertRoundtrip(xml, expectedCode, suggestions)
+    assertRoundtrip(xml, expectedCode, suggestions, expressions)
   })
 })
 
-function assertRoundtrip(xml: string, expectedCode: string, suggestions: readonly Suggestion[]) {
+function assertRoundtrip(
+  xml: string,
+  expectedCode: string,
+  suggestions: readonly Suggestion[],
+  expressions: readonly Expression[]
+) {
   const generator = makeGenerator(suggestions)
   let element: Element
   try {
@@ -391,7 +427,7 @@ function assertRoundtrip(xml: string, expectedCode: string, suggestions: readonl
   const doc = Blockly.utils.xml.getDocument()
   const xmlElement = doc.documentElement
 
-  gherkinDocumentToBlocklyXml(gherkinDocument, xmlElement)
+  gherkinDocumentToBlocklyXml(expressions, gherkinDocument, xmlElement)
   assertCode(xmlElement, generator, expectedCode)
 }
 

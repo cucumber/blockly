@@ -56,6 +56,8 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
     },
   }
 
+  const stepStatements = ['step'].concat(suggestions.map((s) => s.label))
+
   Blockly.Blocks['step'] = {
     init: function (this: Blockly.Block) {
       const dummyInput = this.appendDummyInput()
@@ -69,8 +71,8 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
       )
       dummyInput.appendField(new Blockly.FieldTextInput('...'), `TEXT`)
 
-      this.setPreviousStatement(true, 'step')
-      this.setNextStatement(true, 'step')
+      this.setPreviousStatement(true, stepStatements)
+      this.setNextStatement(true, stepStatements)
       this.setColour(300)
       this.setTooltip('generic step')
       this.setHelpUrl('')
@@ -98,8 +100,8 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
           }
         }
 
-        this.setPreviousStatement(true, 'STEP')
-        this.setNextStatement(true, 'STEP')
+        this.setPreviousStatement(true, stepStatements)
+        this.setNextStatement(true, stepStatements)
         this.setColour(270)
         this.setTooltip(suggestion.label)
         this.setHelpUrl('')

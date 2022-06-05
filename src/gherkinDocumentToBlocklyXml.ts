@@ -1,3 +1,4 @@
+import { Argument, Expression } from '@cucumber/cucumber-expressions'
 import { walkGherkinDocument } from '@cucumber/gherkin-utils'
 import { GherkinDocument } from '@cucumber/messages'
 import Blockly from 'blockly'
@@ -9,7 +10,11 @@ type Parents = {
   stepParent?: Element
 }
 
-export function gherkinDocumentToBlocklyXml(gherkinDocument: GherkinDocument, xml: Element): void {
+export function gherkinDocumentToBlocklyXml(
+  expressions: readonly Expression[],
+  gherkinDocument: GherkinDocument,
+  xml: Element
+): void {
   walkGherkinDocument<Parents>(
     gherkinDocument,
     { featureParent: xml },
@@ -91,29 +96,20 @@ export function gherkinDocumentToBlocklyXml(gherkinDocument: GherkinDocument, xm
 
         return { ...parents, ruleParent: next, scenarioParent: next, stepParent: stepsStatement }
       },
-      // background(background, parents) {
-      //   const block = Blockly.utils.xml.createElement('block')
-      //   block.setAttribute('type', 'background')
-      //   block.setAttribute('id', background.id)
-      //   parents.scenarioParent?.appendChild(block)
-      //
-      //   const nameField = Blockly.utils.xml.createElement('field')
-      //   nameField.setAttribute('name', 'NAME')
-      //   nameField.innerHTML = background.name
-      //   block.appendChild(nameField)
-      //
-      //   const stepsStatement = Blockly.utils.xml.createElement('statement')
-      //   stepsStatement.setAttribute('name', 'STEPS')
-      //   block.appendChild(stepsStatement)
-      //
-      //   const next = Blockly.utils.xml.createElement('next')
-      //   block.appendChild(next)
-      //
-      //   return { ...parents, scenarioParent: next, stepParent: stepsStatement }
-      // },
       step(step, parents) {
+        let args: readonly Argument[] | null = null
+        let expression: Expression | null = null
+        for (const expr of expressions) {
+          const a = expr.match(step.text)
+          if (a) {
+            args = a
+            expression = expr
+            break
+          }
+        }
+        const type = expression === null ? 'step' : expression.source
         const block = Blockly.utils.xml.createElement('block')
-        block.setAttribute('type', 'step')
+        block.setAttribute('type', type)
         block.setAttribute('id', step.id)
         parents.stepParent?.appendChild(block)
 
@@ -122,10 +118,40 @@ export function gherkinDocumentToBlocklyXml(gherkinDocument: GherkinDocument, xm
         nameField.innerHTML = step.keyword.trim() // TODO: Deal with (non)-spaces somehow
         block.appendChild(nameField)
 
-        const textField = Blockly.utils.xml.createElement('field')
-        textField.setAttribute('name', `TEXT`)
-        textField.innerHTML = step.text
-        block.appendChild(textField)
+        if (args === null) {
+          const textField = Blockly.utils.xml.createElement('field')
+          textField.setAttribute('name', `TEXT`)
+          textField.innerHTML = step.text
+          block.appendChild(textField)
+        } else {
+          let offset = 0
+          let fieldCounter = 1
+          for (const arg of args) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            if (arg.group.start! > 0) {
+              const textField = Blockly.utils.xml.createElement('field')
+              textField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
+              textField.innerHTML = step.text.substring(offset, arg.group.start)
+              block.appendChild(textField)
+            }
+
+            const argField = Blockly.utils.xml.createElement('field')
+            argField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            argField.innerHTML = arg.group.value!
+            block.appendChild(argField)
+
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            offset = arg.group.end!
+          }
+          const suffix = step.text.substring(offset)
+          if (suffix !== '') {
+            const textField = Blockly.utils.xml.createElement('field')
+            textField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
+            textField.innerHTML = suffix
+            block.appendChild(textField)
+          }
+        }
 
         const next = Blockly.utils.xml.createElement('next')
         block.appendChild(next)
@@ -135,38 +161,3 @@ export function gherkinDocumentToBlocklyXml(gherkinDocument: GherkinDocument, xm
     }
   )
 }
-
-// for (const suggestion of suggestions) {
-//   const args = suggestion.expression.match(step.text)
-//   if (args != null) {
-//     let offset = 0
-//     let fieldCounter = 1
-//     for (const arg of args) {
-//       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-//       if (arg.group.start! > 0) {
-//         const textField = Blockly.utils.xml.createElement('field')
-//         textField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
-//         textField.innerHTML = step.text.substring(0, arg.group.start)
-//         stepBlock.appendChild(textField)
-//       }
-//
-//       const argField = Blockly.utils.xml.createElement('field')
-//       argField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
-//       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-//       argField.innerHTML = arg.group.value!
-//       stepBlock.appendChild(argField)
-//
-//       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-//       offset = arg.group.end!
-//     }
-//     const suffix = step.text.substring(offset)
-//     if (suffix !== '') {
-//       const textField = Blockly.utils.xml.createElement('field')
-//       textField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
-//       textField.innerHTML = suffix
-//       stepBlock.appendChild(textField)
-//     }
-//     stepBlock.setAttribute('type', suggestion.label)
-//     break
-//   }
-// }
