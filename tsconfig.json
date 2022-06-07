@@ -1,22 +1,22 @@
 {
   "compilerOptions": {
-    "rootDir": ".",
-    "outDir": "dist",
+    "baseUrl": ".",
     "declaration": true,
-    "declarationMap": true,
-    "target": "es6",
-    "module": "ES2020",
-    "lib": ["es2019", "dom"],
     "sourceMap": true,
     "allowJs": false,
-    "jsx": "react",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
-    "moduleResolution": "Node",
     "downlevelIteration": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true
+    "module": "ESNext",
+    "lib": ["ES6", "dom"],
+    "target": "ES6",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
+    "jsx": "react"
   }
 }

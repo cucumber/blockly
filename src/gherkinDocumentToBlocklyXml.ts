@@ -2,6 +2,7 @@ import { Argument, Expression } from '@cucumber/cucumber-expressions'
 import { walkGherkinDocument } from '@cucumber/gherkin-utils'
 import { GherkinDocument } from '@cucumber/messages'
 import Blockly from 'blockly'
+import formatXml from 'xml-formatter'
 
 type Parents = {
   featureParent?: Element
@@ -113,10 +114,10 @@ export function gherkinDocumentToBlocklyXml(
         block.setAttribute('id', step.id)
         parents.stepParent?.appendChild(block)
 
-        const nameField = Blockly.utils.xml.createElement('field')
-        nameField.setAttribute('name', 'KEYWORD')
-        nameField.innerHTML = step.keyword.trim() // TODO: Deal with (non)-spaces somehow
-        block.appendChild(nameField)
+        const keywordField = Blockly.utils.xml.createElement('field')
+        keywordField.setAttribute('name', 'KEYWORD')
+        keywordField.innerHTML = step.keyword.trim() // TODO: Deal with (non)-spaces somehow
+        block.appendChild(keywordField)
 
         if (args === null) {
           const textField = Blockly.utils.xml.createElement('field')
@@ -127,8 +128,7 @@ export function gherkinDocumentToBlocklyXml(
           let offset = 0
           let fieldCounter = 1
           for (const arg of args) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            if (arg.group.start! > 0) {
+            if (arg.group.start || 0 > 0) {
               const textField = Blockly.utils.xml.createElement('field')
               textField.setAttribute('name', `STEP_FIELD_${fieldCounter++}`)
               textField.innerHTML = step.text.substring(offset, arg.group.start)

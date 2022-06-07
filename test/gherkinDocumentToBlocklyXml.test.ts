@@ -6,8 +6,8 @@ import {
 import { parseGherkinDocument } from '@cucumber/language-service'
 import assert from 'assert'
 import Blockly from 'blockly'
-import formatXml from 'xml-formatter'
 
+//import formatXml from 'xml-formatter'
 import { gherkinDocumentToBlocklyXml } from '../src/gherkinDocumentToBlocklyXml.js'
 
 describe('gherkinDocumentToBlocklyXml', () => {

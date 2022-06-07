@@ -66,6 +66,8 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
           ['Given', 'Given'],
           ['When', 'When'],
           ['Then', 'Then'],
+          ['And', 'And'],
+          ['But', 'But'],
         ]),
         'KEYWORD'
       )
@@ -88,6 +90,8 @@ export function defineBlocks(suggestions: readonly Suggestion[]) {
             ['Given', 'Given'],
             ['When', 'When'],
             ['Then', 'Then'],
+            ['And', 'And'],
+            ['But', 'But'],
           ]),
           'KEYWORD'
         )
