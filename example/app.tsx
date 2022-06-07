@@ -8,12 +8,12 @@ import { buildSuggestions, parseGherkinDocument } from '@cucumber/language-servi
 import React, { useMemo, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import BlocklyComponent from './BlocklyComponent'
+import BlocklyComponent from './BlocklyComponent.js'
 
-// Build some sample step texts and cucumber expressions. These would typically come from a stream
-// of Cucumber Messages.
+// Build some sample step texts and cucumber expressions.
 const registry = new ParameterTypeRegistry()
 const ef = new ExpressionFactory(registry)
+
 const expressions: Expression[] = [
   ef.createExpression('I have {int} cukes in my {word}'),
   ef.createExpression('there are {int} blind mice'),

@@ -2,7 +2,7 @@ import 'blockly/blocks'
 
 import { Expression } from '@cucumber/cucumber-expressions'
 import { Suggestion } from '@cucumber/language-service'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 
 import { mount } from '../src/index.js'
 
