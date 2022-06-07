@@ -9,10 +9,9 @@ import { makeGenerator } from './makeGenerator.js'
 import { toolbox } from './toolbox.js'
 
 /**
- * Mounts a Cucumber Blockly editor under div
+ * Mounts a Cucumber Blockly editor
  *
  * @param $parent the DOM element where the Blockly UI is added
- * @param $xml the DOM element where temporary Blockly XML is added
  * @param suggestions suggestions built by @cucumber/language-service
  * @param expressions all the expressions from step definitions
  * @param gherkinSource the gherkin source used to build the initial blocks
@@ -26,8 +25,8 @@ export function mount(
   expressions: readonly Expression[],
   onBlocklyChanged: (
     error: Error | undefined,
-    blocklyXml: string | undefined,
-    gherkinSource: string | undefined
+    gherkinSource: string | undefined,
+    blocklyXml: string | undefined
   ) => void
 ): () => void {
   defineBlocks(suggestions)
@@ -63,12 +62,13 @@ export function mount(
     let workspaceXml: string | undefined
     let gherkinSource: string | undefined
     try {
-      workspaceXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(blocklyWorkspace))
       gherkinSource = generator.workspaceToCode(blocklyWorkspace)
+      const xml = Blockly.Xml.workspaceToDom(blocklyWorkspace)
+      workspaceXml = Blockly.Xml.domToPrettyText(xml)
     } catch (error) {
       err = error
     }
-    onBlocklyChanged(err, workspaceXml, gherkinSource)
+    onBlocklyChanged(err, gherkinSource, workspaceXml)
   })
 
   return () => blocklyWorkspace.dispose()

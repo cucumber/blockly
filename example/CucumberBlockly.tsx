@@ -6,22 +6,22 @@ import React, { useEffect } from 'react'
 
 import { mount } from '../src/index.js'
 
-type Props = {
+export type CucumberBlocklyProps = {
   initialGherkinSource: string
   suggestions: readonly Suggestion[]
   expressions: readonly Expression[]
-  setWorkspaceXml: (xml: string) => void
-  setGherkinSource: (gherkinSources: string) => void
   setError: (error: string | undefined) => void
+  setGherkinSource: (gherkinSources: string) => void
+  setWorkspaceXml: (xml: string) => void
 }
 
-const BlocklyComponent: React.FunctionComponent<Props> = ({
+export const CucumberBlockly: React.FunctionComponent<CucumberBlocklyProps> = ({
   initialGherkinSource,
   suggestions,
   expressions,
-  setWorkspaceXml,
-  setGherkinSource,
   setError,
+  setGherkinSource,
+  setWorkspaceXml,
 }) => {
   const blocklyDiv = React.createRef<HTMLDivElement>()
 
@@ -32,10 +32,10 @@ const BlocklyComponent: React.FunctionComponent<Props> = ({
       initialGherkinSource,
       suggestions,
       expressions,
-      (err, workspaceXml, gherkinSource) => {
+      (err, gherkinSource, workspaceXml) => {
         setError(err ? err.stack : undefined)
-        setWorkspaceXml(workspaceXml || '')
         setGherkinSource(gherkinSource || '')
+        setWorkspaceXml(workspaceXml || '')
       }
     )
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -43,5 +43,3 @@ const BlocklyComponent: React.FunctionComponent<Props> = ({
 
   return <div ref={blocklyDiv} />
 }
-
-export default BlocklyComponent

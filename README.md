@@ -17,8 +17,15 @@ smaller input fields for step parameters.
 ## Try it out
 
     npm install
-    npm run start
+
+With Vanilla JavaScript (no UI toolkit)
+
+    npm run start-vanilla
+
+With React
+
+    npm run start-react
 
 ## API
 
-The editor is exposed as a React component. See [example/app.tsx](example/app.tsx) for sample usage.
+The editor is exposed as a React component. See [example/app.tsx](example/main-react.tsx) for sample usage.
