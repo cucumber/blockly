@@ -21,7 +21,6 @@ import { toolbox } from './toolbox.js'
  */
 export function mount(
   $parent: Element,
-  $xml: Element,
   gherkinSource: string,
   suggestions: readonly Suggestion[],
   expressions: readonly Expression[],
@@ -54,6 +53,7 @@ export function mount(
     err = error
   }
   if (gherkinDocument) {
+    const $xml = document.createElement('xml')
     gherkinDocumentToBlocklyXml(expressions, gherkinDocument, $xml)
     Blockly.Xml.domToWorkspace($xml, blocklyWorkspace)
   }

@@ -24,13 +24,11 @@ const BlocklyComponent: React.FunctionComponent<Props> = ({
   setError,
 }) => {
   const blocklyDiv = React.createRef<HTMLDivElement>()
-  const blocklyXmlDiv = React.createRef<HTMLDivElement>()
 
   useEffect(() => {
-    if (!(blocklyDiv.current && blocklyXmlDiv.current)) return
+    if (!blocklyDiv.current) return
     return mount(
       blocklyDiv.current,
-      blocklyXmlDiv.current,
       initialGherkinSource,
       suggestions,
       expressions,
@@ -43,12 +41,7 @@ const BlocklyComponent: React.FunctionComponent<Props> = ({
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   }, [initialGherkinSource, suggestions, expressions])
 
-  return (
-    <div>
-      <div ref={blocklyDiv} id="blocklyDiv" />
-      <div style={{ display: 'none' }} ref={blocklyXmlDiv} id="blocklyXmlDiv" />
-    </div>
-  )
+  return <div ref={blocklyDiv} id="blocklyDiv" />
 }
 
 export default BlocklyComponent
