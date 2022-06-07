@@ -4,7 +4,7 @@ import { Expression } from '@cucumber/cucumber-expressions'
 import { Suggestion } from '@cucumber/language-service'
 import React, { useEffect, useMemo } from 'react'
 
-import { defineBlocks, mount } from '../src/index.js'
+import { mount } from '../src/index.js'
 
 type Props = {
   initialGherkinSource: string
@@ -25,8 +25,6 @@ const BlocklyComponent: React.FunctionComponent<Props> = ({
 }) => {
   const blocklyDiv = React.createRef<HTMLDivElement>()
   const blocklyXmlDiv = React.createRef<HTMLDivElement>()
-
-  useMemo(() => defineBlocks(suggestions), [suggestions])
 
   useEffect(() => {
     if (!(blocklyDiv.current && blocklyXmlDiv.current)) return

@@ -3,16 +3,16 @@ import { parseGherkinDocument, Suggestion } from '@cucumber/language-service'
 import Blockly from 'blockly'
 import { BlocklyOptions } from 'core/blockly_options'
 
-import { gherkinDocumentToBlocklyXml } from './gherkinDocumentToBlocklyXml'
-import { makeGenerator } from './makeGenerator'
-import { toolbox } from './toolbox'
+import { defineBlocks } from './defineBlocks.js'
+import { gherkinDocumentToBlocklyXml } from './gherkinDocumentToBlocklyXml.js'
+import { makeGenerator } from './makeGenerator.js'
+import { toolbox } from './toolbox.js'
 
 /**
  * Mounts a Cucumber Blockly editor under div
  *
  * @param $parent the DOM element where the Blockly UI is added
  * @param $xml the DOM element where temporary Blockly XML is added
- * @param options Blockly optopns
  * @param suggestions suggestions built by @cucumber/language-service
  * @param expressions all the expressions from step definitions
  * @param gherkinSource the gherkin source used to build the initial blocks
@@ -31,6 +31,7 @@ export function mount(
     gherkinSource: string | undefined
   ) => void
 ): () => void {
+  defineBlocks(suggestions)
   const options: BlocklyOptions = {
     readOnly: false,
     trashcan: true,
