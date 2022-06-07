@@ -41,7 +41,7 @@ const BlocklyComponent: React.FunctionComponent<Props> = ({
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   }, [initialGherkinSource, suggestions, expressions])
 
-  return <div ref={blocklyDiv} id="blocklyDiv" />
+  return <div ref={blocklyDiv} />
 }
 
 export default BlocklyComponent
