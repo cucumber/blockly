@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Cucumber Blockly Editor Example</title>
+
+    <style>
+      .flex-container {
+        display: flex;
+      }
+
+      .flex-child {
+        flex: 1;
+      }
+
+      .flex-child:first-child {
+        margin-right: 20px;
+      }
+
+      .border {
+        border: 1px gainsboro solid;
+        padding: 1em;
+      }
+
+      .cucumber-blockly {
+        height: 800px;
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <h1>Cucumber Blockly Editor Example</h1>
+      <div id="app">
+        <div class="flex-container">
+          <div class="flex-child" id="cucumberBlockly">Cucumber Blockly</div>
+
+          <div class="flex-child">
+            <pre class="border" id="error">Error</pre>
+            <pre class="border" id="gherkinSource">Gherkin Source</pre>
+            <pre class="border" id="workspaceXml">Workspace XML</pre>
+          </div>
+        </div>
+      </div>
+      <script src="js/main.js"></script>
+    </main>
+  </body>
+</html>
