@@ -20,11 +20,11 @@ smaller input fields for step parameters.
 
 With Vanilla JavaScript (no UI toolkit)
 
-    npm run start-vanilla
+    npm run start:vanilla
 
 With React
 
-    npm run start-react
+    npm run start:react
 
 ## API
 
