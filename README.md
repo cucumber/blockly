@@ -2,6 +2,8 @@
 
 This is a beginner-friendly Gherkin editor based on [Blockly](https://developers.google.com/blockly).
 
+You can [try a live demo here](https://cucumber.github.io/blockly/).
+
 **The editor is experimental and not ready for production use.**
 
 Users can drag in a generic Step block where they can change the keyword and type
