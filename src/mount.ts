@@ -42,6 +42,7 @@ export function mount(
     toolbox: toolbox(suggestions),
   }
   $parent.classList.add('cucumber-blockly')
+  // @ts-ignore
   const blocklyWorkspace = Blockly.inject($parent, options)
   const generator = makeGenerator(suggestions)
   generator.init(blocklyWorkspace)

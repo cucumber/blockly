@@ -2,7 +2,6 @@ import { Argument, Expression } from '@cucumber/cucumber-expressions'
 import { walkGherkinDocument } from '@cucumber/gherkin-utils'
 import { GherkinDocument } from '@cucumber/messages'
 import Blockly from 'blockly'
-import formatXml from 'xml-formatter'
 
 type Parents = {
   featureParent?: Element
