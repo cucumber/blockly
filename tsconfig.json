@@ -12,7 +12,7 @@
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "module": "ESNext",
-    "lib": ["ES6", "dom"],
+    "lib": ["ES6", "DOM", "DOM.Iterable"],
     "target": "ES6",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
