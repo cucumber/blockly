@@ -38,7 +38,7 @@ export const CucumberBlockly: React.FunctionComponent<CucumberBlocklyProps> = ({
         setWorkspaceXml(workspaceXml || '')
       }
     )
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialGherkinSource, suggestions, expressions])
 
   return <div ref={blocklyDiv} />
