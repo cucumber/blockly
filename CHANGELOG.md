@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.2] - 2022-09-13
+
 ## [0.0.1] - 2022-09-13
 
 ### Added
@@ -15,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.0]
 
-[unreleased]: https://github.com/cucumber/blockly/compare/v0.0.1...HEAD
+[unreleased]: https://github.com/cucumber/blockly/compare/v0.0.2...HEAD
+[0.0.2]: https://github.com/cucumber/blockly/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/cucumber/blockly/compare/v0.0.0...v0.0.1
 [0.0.0]: https://github.com/cucumber/blockly/compare/818c1c282d9a685c8b9924f39a153a04b14f6b9e...v0.0.0
