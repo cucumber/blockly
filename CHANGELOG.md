@@ -11,4 +11,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First commit
 
-[unreleased]: https://github.com/cucumber/blockly/compare/818c1c282d9a685c8b9924f39a153a04b14f6b9e...HEAD
+[unreleased]: https://github.com/cucumber/blockly/compare/v0.0.0...HEAD
+[0.0.0]: https://github.com/cucumber/blockly/compare/818c1c282d9a685c8b9924f39a153a04b14f6b9e...v0.0.0
