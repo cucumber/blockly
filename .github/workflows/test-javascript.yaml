@@ -31,6 +31,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-          cache-dependency-path: javascript/package-lock.json
+          cache-dependency-path: package-lock.json
       - run: npm install-test
       - run: npm run eslint
