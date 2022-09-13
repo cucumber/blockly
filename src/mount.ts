@@ -16,7 +16,7 @@ import { toolbox } from './toolbox.js'
  * @param expressions all the expressions from step definitions
  * @param gherkinSource the gherkin source used to build the initial blocks
  * @param onBlocklyChanged called with an error, new generated Gherkin source and the Blockly XML whenever the blockly
- * editor has changed. All parameteers may be undefined
+ * editor has changed.
  */
 export function mount(
   $parent: Element,
