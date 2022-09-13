@@ -1,5 +1,3 @@
-import assert from 'node:assert'
-
 import {
   Expression,
   ExpressionFactory,
@@ -8,6 +6,7 @@ import {
 import { pretty } from '@cucumber/gherkin-utils'
 import { buildSuggestions, parseGherkinDocument, Suggestion } from '@cucumber/language-service'
 import { GherkinDocument } from '@cucumber/messages'
+import assert from 'assert'
 import Blockly from 'blockly'
 import { describe, it } from 'mocha'
 import formatXml from 'xml-formatter'
