@@ -1,3 +1,5 @@
+import assert from 'node:assert'
+
 import {
   Expression,
   ExpressionFactory,
@@ -8,7 +10,6 @@ import { buildSuggestions, parseGherkinDocument, Suggestion } from '@cucumber/la
 import { GherkinDocument } from '@cucumber/messages'
 import Blockly from 'blockly'
 import { describe, it } from 'mocha'
-import assert from 'node:assert'
 import formatXml from 'xml-formatter'
 
 import { defineBlocks } from '../src/defineBlocks.js'
