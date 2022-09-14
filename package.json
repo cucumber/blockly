@@ -53,8 +53,8 @@
   },
   "devDependencies": {
     "@types/mocha": "9.1.1",
-    "@types/node": "18.7.17",
-    "@types/react": "18.0.19",
+    "@types/node": "18.7.18",
+    "@types/react": "18.0.20",
     "@types/react-dom": "18.0.6",
     "@typescript-eslint/eslint-plugin": "5.37.0",
     "@typescript-eslint/parser": "5.37.0",
