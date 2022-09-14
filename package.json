@@ -20,7 +20,7 @@
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
   },
   "scripts": {
-    "build": "npm run build:cjs && npm run build:esm",
+    "build": "npm run build:cjs && npm run build:esm && npm run build:vanilla",
     "build:cjs": "tsc --build tsconfig.build-cjs.json && cp package.cjs.json dist/cjs/package.json",
     "build:esm": "tsc --build tsconfig.build-esm.json",
     "build:vanilla": "esbuild docs/main-vanilla.ts --bundle --outfile=docs/js/main.js --sourcemap=inline",
@@ -29,7 +29,7 @@
     "start:react": "esbuild docs/main-react.tsx --bundle --outfile=docs/js/main.js --servedir=docs --sourcemap=inline",
     "start:vanilla": "esbuild docs/main-vanilla.ts --bundle --outfile=docs/js/main.js --servedir=docs --sourcemap=inline",
     "start:vanilla:prebuilt": "npm run build:vanilla && http-server -c-1 docs",
-    "postinstall": "cp -r node_modules/blockly/media docs",
+    "prebuild": "cp -r node_modules/blockly/media/ docs/media",
     "eslint-fix": "eslint --ext ts,tsx --max-warnings 0 --fix src test docs",
     "eslint": "eslint --ext ts,tsx --max-warnings 0 src test docs",
     "prepare": "husky install",
