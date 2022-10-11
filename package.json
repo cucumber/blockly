@@ -47,7 +47,7 @@
   "dependencies": {
     "@cucumber/cucumber-expressions": "16.0.0",
     "@cucumber/gherkin-utils": "8.0.0",
-    "@cucumber/language-service": "1.0.0",
+    "@cucumber/language-service": "1.1.1",
     "@cucumber/messages": "19.1.4",
     "blockly": "8.0.5"
   },
