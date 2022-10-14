@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Publish dist/esm folder in released package ([#49](https://github.com/cucumber/blockly/pull/49))
+- Publish `dist/esm` folder in released package ([#49](https://github.com/cucumber/blockly/pull/49))
 
 ## [0.0.3] - 2022-09-14
 
