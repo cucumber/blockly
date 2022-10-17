@@ -1,7 +1,6 @@
 import { Expression } from '@cucumber/cucumber-expressions'
 import { parseGherkinDocument, Suggestion } from '@cucumber/language-service'
-import Blockly from 'blockly'
-import { BlocklyOptions } from 'core/blockly_options'
+import Blockly, { BlocklyOptions } from 'blockly'
 
 import { defineBlocks } from './defineBlocks.js'
 import { gherkinDocumentToBlocklyXml } from './gherkinDocumentToBlocklyXml.js'
@@ -12,11 +11,12 @@ import { toolbox } from './toolbox.js'
  * Mounts a Cucumber Blockly editor
  *
  * @param $parent the DOM element where the Blockly UI is added
+ * @param gherkinSource the gherkin source used to build the initial blocks
  * @param suggestions suggestions built by @cucumber/language-service
  * @param expressions all the expressions from step definitions
- * @param gherkinSource the gherkin source used to build the initial blocks
  * @param onBlocklyChanged called with an error, new generated Gherkin source and the Blockly XML whenever the blockly
  * editor has changed.
+ * @returns a function that disposes the Blockly workspace
  */
 export function mount(
   $parent: Element,

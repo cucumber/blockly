@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Upgrade to blockly 9.0.0
 ## [0.0.4] - 2022-10-13
 
 ### Fixed
