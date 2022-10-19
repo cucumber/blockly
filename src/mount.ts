@@ -14,6 +14,7 @@ import { toolbox } from './toolbox.js'
  * @param gherkinSource the gherkin source used to build the initial blocks
  * @param suggestions suggestions built by @cucumber/language-service
  * @param expressions all the expressions from step definitions
+ * @param media where the media files are
  * @param onBlocklyChanged called with an error, new generated Gherkin source and the Blockly XML whenever the blockly
  * editor has changed.
  * @returns a function that disposes the Blockly workspace
@@ -23,6 +24,7 @@ export function mount(
   gherkinSource: string,
   suggestions: readonly Suggestion[],
   expressions: readonly Expression[],
+  media: string,
   onBlocklyChanged: (
     error: Error | undefined,
     gherkinSource: string | undefined,
@@ -33,7 +35,7 @@ export function mount(
   const options: BlocklyOptions = {
     readOnly: false,
     trashcan: true,
-    media: 'media/',
+    media,
     move: {
       scrollbars: true,
       drag: true,

@@ -32,6 +32,7 @@ export const CucumberBlockly: React.FunctionComponent<CucumberBlocklyProps> = ({
       initialGherkinSource,
       suggestions,
       expressions,
+      'media',
       (err, gherkinSource, workspaceXml) => {
         setError(err ? err.stack : undefined)
         setGherkinSource(gherkinSource || '')
