@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Add a `media` parameter to `mount`. [#52](https://github.com/cucumber/blockly/pull/52)
 - Upgrade to blockly 9.0.0
 
 ## [0.0.4] - 2022-10-13
