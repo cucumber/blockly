@@ -37,6 +37,7 @@ mount(
   gherkinSource,
   suggestions,
   expressions,
+  'media',
   (err, gherkinSource, workspaceXml) => {
     let $e: Element | null
     if (err && ($e = document.querySelector('#error'))) {

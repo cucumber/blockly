@@ -19,3 +19,7 @@ With Vanilla JavaScript (no UI toolkit)
 With React
 
     npm run start:react
+
+## Run tests
+
+    npm test
