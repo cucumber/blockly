@@ -1,6 +1,6 @@
 {
   "name": "@cucumber/blockly",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Gherkin Editor in Blockly",
   "type": "module",
   "main": "dist/cjs/src/index.js",
