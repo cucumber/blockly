@@ -49,7 +49,7 @@
     "@cucumber/gherkin-utils": "8.0.2",
     "@cucumber/language-service": "1.4.0",
     "@cucumber/messages": "21.0.1",
-    "blockly": "9.1.1"
+    "blockly": "9.2.1"
   },
   "devDependencies": {
     "@types/mocha": "10.0.1",
