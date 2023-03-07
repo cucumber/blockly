@@ -77,7 +77,7 @@
     "react-dom": "18.2.0",
     "ts-node": "10.9.1",
     "typescript": "4.9.5",
-    "xml-formatter": "3.3.0"
+    "xml-formatter": "3.3.1"
   },
   "prettier": {
     "trailingComma": "es5",
