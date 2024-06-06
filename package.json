@@ -34,7 +34,6 @@
     "eslint": "eslint --ext ts,tsx --max-warnings 0 src test docs",
     "prepare": "husky install",
     "pretty-quick-staged": "pretty-quick --staged",
-    "upgrade": "npm-check-updates --upgrade"
   },
   "keywords": [
     "gherkin",
