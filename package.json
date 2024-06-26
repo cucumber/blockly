@@ -68,7 +68,7 @@
     "eslint-plugin-simple-import-sort": "12.1.0",
     "http-server": "14.1.1",
     "husky": "9.0.11",
-    "mocha": "10.5.1",
+    "mocha": "10.5.2",
     "prettier": "3.3.2",
     "pretty-quick": "4.0.0",
     "react": "18.3.1",
