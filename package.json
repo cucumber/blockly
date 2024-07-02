@@ -44,7 +44,7 @@
   "author": "Aslak Hellesøy",
   "license": "MIT",
   "dependencies": {
-    "@cucumber/cucumber-expressions": "16.1.2",
+    "@cucumber/cucumber-expressions": "17.1.0",
     "@cucumber/gherkin-utils": "8.0.6",
     "@cucumber/language-service": "1.4.1",
     "@cucumber/messages": "24.1.0",
