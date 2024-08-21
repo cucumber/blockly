@@ -45,7 +45,7 @@
   "license": "MIT",
   "dependencies": {
     "@cucumber/cucumber-expressions": "16.1.2",
-    "@cucumber/gherkin-utils": "8.0.6",
+    "@cucumber/gherkin-utils": "9.0.0",
     "@cucumber/language-service": "1.4.1",
     "@cucumber/messages": "24.1.0",
     "blockly": "9.3.3"
